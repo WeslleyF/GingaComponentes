@@ -8,7 +8,8 @@ unit Ginga;
 interface
 
 uses
-  ginga.parser, APIInformation, Ginga.Erro, LazarusPackageIntf;
+  ginga.parser, APIInformation, Ginga.Erro, ginga.restclient, 
+  LazarusPackageIntf;
 
 implementation
 

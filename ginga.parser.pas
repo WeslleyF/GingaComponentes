@@ -13,7 +13,7 @@ type
   { GingaParser }
 
   GingaParser = class
-    // Esses metódos liberam seus parametros que não serão usados no contexto externos.
+    // Esses metódos liberam seus parametros que não serão usados no contexto externo.
     // No caso dos ObterResposta o stream é liberado
     // No caso do ObterStream o objeto é liberado
     class function ObterRespostaV(aStream : TStringStream) : Variant; // Retorna em Variant
@@ -21,7 +21,8 @@ type
     class procedure ObterRespostaO(aStream : TStringStream; aObject : TObject); // Retorna em Object
     class function ObterStream(aContent: TObject; aLiberarObjeto : Boolean) : TStringStream; // Retorna o objeto em stream
     class function PreencherBufDataset(aDataSet: TBufDataset; aList: TFPList): Integer;
-    class procedure PreencherObjetoDataSet(aDataset: TDataset; aObjeto: TObject);
+    class procedure PreencherObjetoComDataSet(aDataset: TDataset; aObjeto: TObject);
+    class procedure AtualizarRegistroBufDataset(aDataset: TDataset; aObjeto: TObject);
   end;
 
 implementation
@@ -112,7 +113,7 @@ var
   aField       : TField;
   I            : Integer;
 begin
-    // Para que esta rotina funcione o nome do campo no dataset deve ser o mesmo da propriedade da classe
+  // Para que esta rotina funcione o nome do campo no dataset deve ser o mesmo da propriedade da classe
   Result := aList.Count;
   if Result = 0 then Exit;
 
@@ -147,7 +148,7 @@ begin
   end
 end;
 
-class procedure GingaParser.PreencherObjetoDataSet(aDataset: TDataset; aObjeto: TObject);
+class procedure GingaParser.PreencherObjetoComDataSet(aDataset: TDataset; aObjeto: TObject);
 var
   aContextRTTI : TRttiContext;
   aInfoRTTI    : TRttiType;
@@ -174,6 +175,38 @@ begin
        else raise Exception.Create('Tipo não tratado.');
      end;
    end;
+end;
+
+class procedure GingaParser.AtualizarRegistroBufDataset(aDataset: TDataset; aObjeto: TObject);
+var
+  aContextRTTI : TRttiContext;
+  aInfoRTTI    : TRttiType;
+  aPropRTTI    : TRttiProperty;
+  aField       : TField;
+begin
+  // Para que esta rotina funcione o nome do campo no dataset deve ser o mesmo da propriedade da classe
+  if not Assigned(aObjeto) then raise Exception.Create('Objeto não instanciado.');
+
+  aContextRTTI := TRttiContext.Create;
+  aInfoRTTI    := aContextRTTI.GetType(aObjeto.ClassInfo);
+
+  aDataSet.Edit;
+  for aPropRTTI in aInfoRTTI.GetProperties do
+  begin
+    aField := aDataSet.FieldByName(aPropRTTI.Name);
+    case aField.DataType of
+      ftString   : aField.AsString   := aPropRTTI.GetValue(aObjeto).AsString;
+      ftInteger  : aField.AsInteger  := aPropRTTI.GetValue(aObjeto).AsInteger;
+      ftBoolean  : aField.AsBoolean  := aPropRTTI.GetValue(aObjeto).AsBoolean;
+      ftCurrency : aField.AsCurrency := aPropRTTI.GetValue(aObjeto).AsCurrency;
+      ftDateTime : aField.AsDateTime := TDateTime(aPropRTTI.GetValue(aObjeto).AsExtended);
+      ftFloat    : aField.AsFloat    := aPropRTTI.GetValue(aObjeto).AsExtended;
+      else raise Exception.Create('Tipo não tratado.');
+    end;
+  end;
+  aDataSet.Post;
+
+  aObjeto.Free;
 end;
 
 end.

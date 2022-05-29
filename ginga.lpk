@@ -23,8 +23,15 @@
         <Filename Value="ginga.erro.pas"/>
         <UnitName Value="ginga.erro"/>
       </Item>
+      <Item>
+        <Filename Value="ginga.restclient.pas"/>
+        <UnitName Value="ginga.restclient"/>
+      </Item>
     </Files>
     <RequiredPkgs>
+      <Item>
+        <PackageName Value="indylaz"/>
+      </Item>
       <Item>
         <PackageName Value="LCL"/>
       </Item>
