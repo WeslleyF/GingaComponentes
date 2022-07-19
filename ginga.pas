@@ -8,7 +8,7 @@ unit Ginga;
 interface
 
 uses
-  ginga.parser, APIInformation, Ginga.Erro, ginga.restclient, 
+  ginga.parser, APIInformation, Ginga.Erro, ginga.restclient, GingaDatasetAPI, 
   LazarusPackageIntf;
 
 implementation
@@ -16,6 +16,7 @@ implementation
 procedure Register;
 begin
   RegisterUnit('APIInformation', @APIInformation.Register);
+  RegisterUnit('GingaDatasetAPI', @GingaDatasetAPI.Register);
 end;
 
 initialization

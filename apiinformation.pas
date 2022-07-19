@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs;
 
 type
-  TAPIInformation = class(TComponent)
+  TGingaAPIInformation = class(TComponent)
   private
     FBaseURL : string;
   protected
@@ -26,7 +26,7 @@ implementation
 procedure Register;
 begin
   {$I apiinformation_icon.lrs}
-  RegisterComponents('Ginga',[TAPIInformation]);
+  RegisterComponents('Ginga', [TGingaAPIInformation]);
 end;
 
 end.

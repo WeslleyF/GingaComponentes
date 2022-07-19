@@ -27,8 +27,16 @@
         <Filename Value="ginga.restclient.pas"/>
         <UnitName Value="ginga.restclient"/>
       </Item>
+      <Item>
+        <Filename Value="gingadatasetapi.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="GingaDatasetAPI"/>
+      </Item>
     </Files>
     <RequiredPkgs>
+      <Item>
+        <PackageName Value="MemDSLaz"/>
+      </Item>
       <Item>
         <PackageName Value="indylaz"/>
       </Item>
